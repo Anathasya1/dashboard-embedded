@@ -34,7 +34,11 @@ export async function fetchLatest(): Promise<SensorData> {
 
 export async function fetchHistory(date?: string): Promise<SensorData[]> {
   if (USE_MOCK_DATA) return MOCK_HISTORY;
+  
+  // Perhatikan bagian ini: karena URL sudah mengandung '?action=history', 
+  // kita gunakan '&' untuk menambahkan parameter date.
   const suffix = date ? `&date=${encodeURIComponent(date)}` : '';
+  
   return fetchJson<SensorData[]>(`${SHEETS_BASE_URL}${SHEETS_ENDPOINTS.history}${suffix}`);
 }
 
