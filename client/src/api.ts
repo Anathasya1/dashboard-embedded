@@ -79,3 +79,4 @@ export async function getDates(): Promise<string[]> {
     setTimeout(() => resolve(DUMMY_DATES), 300);
   });
 }
+

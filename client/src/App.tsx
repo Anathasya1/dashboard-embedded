@@ -6,7 +6,7 @@ import { getLatest } from './api';
 import { POLL_INTERVAL_MS } from './constants';
 import type { SensorData } from './types';
 
-// import "./theme.css"
+import "./theme.css"
 export default function App() {
   const [data, setData] = useState<SensorData | null>(null);
   const [lastUpdate, setLastUpdate] = useState<number | null>(null);
