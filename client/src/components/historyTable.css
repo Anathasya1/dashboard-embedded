@@ -1,0 +1,25 @@
+/* Styling kustom untuk scrollbar tabel riwayat */
+.table-scroll-container {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 12px;
+  border-radius: 8px; 
+}
+
+.table-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}

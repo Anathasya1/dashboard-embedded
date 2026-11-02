@@ -4,7 +4,7 @@ export const PORT = 3000;
 export const USE_MOCK_DATA = false;
 
 // URL Web App Google Apps Script (deploy sebagai web app, akses "Anyone")
-export const SHEETS_BASE_URL = 'https://script.google.com/macros/s/AKfycbzkVcmjiQx_y9hVKIaYXL2frdbz0F4FV3afe6fBXqkcUl6mPBKpD8IdcjJxlSkgjoMEXg/exec';
+export const SHEETS_BASE_URL = 'https://script.google.com/macros/s/AKfycbw4t1k_OuBew1kruCKFhVFtV33JDH5flIg5_D-IixhB6S80CJvraCETP9Cz2fSbbU7BAw/exec';
 
 export const SHEETS_ENDPOINTS = {
   latest: '?action=latest',

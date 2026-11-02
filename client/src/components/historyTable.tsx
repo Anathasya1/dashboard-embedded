@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getHistory, getDates } from '../api';
 import { STATUS_CONFIG, THRESHOLDS } from '../constants';
 import type { SensorData, SoilStatus } from '../types';
+import './historyTable.css';
 
 function statusOf(soil: number): SoilStatus {
   if (soil > THRESHOLDS.soilKering) return 'kering';
@@ -19,16 +20,36 @@ export default function historyTable() {
     getDates()
       .then((d) => {
         setDates(d);
-        if (d.length > 0) setSelected(d[0]);
+        if (d.length > 0) {
+          // Otomatis pilih tanggal hari ini jika tersedia di list
+          const today = new Date().toISOString().split('T')[0];
+          if (d.includes(today)) {
+            setSelected(today);
+          } else {
+            setSelected(d[0]);
+          }
+        }
       })
       .catch((e: Error) => setErr(e.message));
   }, []);
 
+  // Mengambil data riwayat secara otomatis setiap 5 detik
   useEffect(() => {
     if (!selected) return;
-    getHistory(selected)
-      .then(setRows)
-      .catch((e: Error) => setErr(e.message));
+
+    const fetchRows = () => {
+      getHistory(selected)
+        .then((res) => {
+          setRows(res);
+          setErr(null);
+        })
+        .catch((e: Error) => setErr(e.message));
+    };
+
+    fetchRows(); // Ambil data pertama kali saat tanggal dipilih
+
+    const interval = setInterval(fetchRows, 5000); // Loop setiap 5 detik
+    return () => clearInterval(interval); // Bersihkan interval saat komponen unmount atau tanggal berubah
   }, [selected]);
 
   return (
@@ -47,45 +68,52 @@ export default function historyTable() {
       {rows.length === 0 ? (
         <div className="empty">Belum ada data untuk tanggal ini.</div>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Jam</th>
-              <th>Soil</th>
-              <th>Status Tanah</th>
-              <th>Suhu Tanah (°C)</th> {/* <-- Kolom Suhu Tanah Ditambahkan */}
-              <th>Suhu Udara (°C)</th>
-              <th>RH (%)</th>
-              <th>Pompa</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r, i) => {
-              const key: SoilStatus = r.soil_status ?? statusOf(r.soil);
-              const cfg = STATUS_CONFIG[key];
-              return (
-                <tr key={i}>
-                  <td>{r.timestamp?.slice(11, 19)}</td>
-                  <td>{r.soil}</td>
-                  <td>
-                    <span className="badge" style={{ background: cfg.bg, color: cfg.text }}>
-                      {cfg.emoji} {cfg.label}
-                    </span>
-                  </td>
-                  <td>{r.soil_temp}</td> {/* <-- Data Suhu Tanah Ditambahkan */}
-                  <td>{r.temp}</td>
-                  <td>{r.hum}</td>
-                  <td>
-                    <span className={`badge ${r.pump ? 'badge-on' : 'badge-off'}`}>
-                      {r.pump ? 'ON' : 'OFF'}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-scroll-container">
+          <table>
+            <thead style={{ position: 'sticky', top: 0, background: '#2c1e14', zIndex: 1 }}>
+              <tr>
+                <th>Jam</th>
+                <th>Soil</th>
+                <th>Status Tanah</th>
+                <th>Suhu Tanah (°C)</th>
+                <th>Suhu Udara (°C)</th>
+                <th>RH (%)</th>
+                <th>Pompa</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => {
+                const key: SoilStatus = r.soil_status ?? statusOf(r.soil);
+                const cfg = STATUS_CONFIG[key];
+                
+                const formattedTime = r.timestamp 
+                  ? new Date(r.timestamp).toLocaleTimeString('id-ID', { hour12: false }) 
+                  : '';
+
+                return (
+                  <tr key={i}>
+                    <td>{formattedTime}</td>
+                    <td>{r.soil}</td>
+                    <td>
+                      <span className="badge" style={{ background: cfg.bg, color: cfg.text }}>
+                        {cfg.emoji} {cfg.label}
+                      </span>
+                    </td>
+                    <td>{r.soil_temp}</td>
+                    <td>{r.temp}</td>
+                    <td>{r.hum}</td>
+                    <td>
+                      <span className={`badge ${r.pump ? 'badge-on' : 'badge-off'}`}>
+                        {r.pump ? 'ON' : 'OFF'}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
-}
+} 
