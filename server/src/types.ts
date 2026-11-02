@@ -3,6 +3,7 @@ export type SoilStatus = 'kering' | 'optimal' | 'basah' | 'unknown';
 export interface SensorData {
   timestamp: string;
   soil: number;
+  soilTemperature: number;
   soil_status: SoilStatus;
   temp: number;
   hum: number;

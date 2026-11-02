@@ -53,7 +53,8 @@ export default function historyTable() {
               <th>Jam</th>
               <th>Soil</th>
               <th>Status Tanah</th>
-              <th>Suhu (°C)</th>
+              <th>Suhu Tanah (°C)</th> {/* <-- Kolom Suhu Tanah Ditambahkan */}
+              <th>Suhu Udara (°C)</th>
               <th>RH (%)</th>
               <th>Pompa</th>
             </tr>
@@ -71,6 +72,7 @@ export default function historyTable() {
                       {cfg.emoji} {cfg.label}
                     </span>
                   </td>
+                  <td>{r.soil_temp}</td> {/* <-- Data Suhu Tanah Ditambahkan */}
                   <td>{r.temp}</td>
                   <td>{r.hum}</td>
                   <td>

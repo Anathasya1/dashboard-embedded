@@ -4,6 +4,7 @@ export interface SensorData {
   timestamp: string;
   soil: number;
   soil_status: SoilStatus;
+  soil_temp: number;
   temp: number;
   hum: number;
   pump: boolean;

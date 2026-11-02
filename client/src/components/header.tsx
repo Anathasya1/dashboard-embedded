@@ -6,7 +6,7 @@ interface HeaderProps {
 export default function header({ lastUpdate, intervalMs }: HeaderProps) {
   return (
     <div className="header">
-      <h1>🌱 Monitoring Tanaman</h1>
+      <h1>🌱 Monitoring Tanaman Daun Bawang</h1>
       <div className="meta">
         {lastUpdate
           ? `Update terakhir: ${new Date(lastUpdate).toLocaleTimeString('id-ID')} · Interval: ${intervalMs / 1000} detik`

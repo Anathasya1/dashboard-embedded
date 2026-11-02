@@ -6,7 +6,7 @@ interface StatusCardsProps {
 }
 
 function getStatus(soil: number): SoilStatus {
-  if (soil > THRESHOLDS.soilKering) return 'kering';
+  if (soil > THRESHOLDS.soilKering) return 'kering'; // Disesuaikan dengan konstanta yang ada
   if (soil < THRESHOLDS.soilBasah) return 'basah';
   return 'optimal';
 }
@@ -46,6 +46,9 @@ export default function statusCards({ data }: StatusCardsProps) {
         <div className="value">{data.soil}</div>
         <div className="status">{cfg.emoji} {cfg.label}</div>
       </div>
+
+      {/* Kartu Suhu Tanah yang baru ditambahkan */}
+      <PlainCard label="SUHU TANAH" value={data.soil_temp} unit="°C" />
 
       <PlainCard label="SUHU UDARA" value={data.temp} unit="°C" />
       <PlainCard label="KELEMBABAN UDARA" value={data.hum} unit="%" />
